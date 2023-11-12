@@ -1,5 +1,19 @@
+<script setup>
+import axios from "axios";
+import {onMounted, ref} from "vue";
+
+const tickets = ref([]);
+
+onMounted(() => {
+  axios.get("api/ticket")
+      .then(response => {
+        tickets.value = response.data;
+      });
+});
+</script>
+
 <template>
-  <div class="about">
+  <main>
     <h1>Tickets</h1>
     <table>
       <tr>
@@ -11,29 +25,25 @@
         <td>{{ ticket.destination }}</td>
       </tr>
     </table>
-  </div>
+  </main>
 </template>
 
-<script setup>
-  import axios from "axios";
-  import {onMounted, ref} from "vue";
+<style lang="scss" scoped>
+main {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 16px;
 
-  const tickets = ref([]);
+  h1 {
+    margin-bottom: 16px;
+    text-align: center;
+  }
 
-  onMounted(() => {
-    axios.get("api/ticket")
-        .then(response => {
-          tickets.value = response.data;
-        });
-  })
-</script>
-
-<style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
+  td {
+    text-align: center;
   }
 }
 </style>
