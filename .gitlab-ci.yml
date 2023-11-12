@@ -22,6 +22,6 @@ deploy test-backend:
   tags:
     - main
   script:
-    - cd /opt/iti0302
+    - cd /opt/frontend
     - docker-compose down
     - docker-compose up -d
