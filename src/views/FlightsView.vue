@@ -7,7 +7,7 @@ import {ref} from "vue";
 let flights = ref([]);
 
 const findFlight = (departure, destination) => {
-  axios.get("api/ticket/find/" + departure + "/" + destination)
+  axios.get("api/flight/find/" + departure + "/" + destination)
       .then(response => {
         flights.value = response.data;
       });
