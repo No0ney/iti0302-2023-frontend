@@ -1,0 +1,27 @@
+stages:
+  - build
+  - deploy
+
+build test-backend:
+  stage: build
+  only:
+    refs:
+      - main
+  tags:
+    - main
+  script:
+    - docker build -t iti0302-1023-frontend .
+    - docker tag iti0302-1023-frontend:latest sh0rts1ghted/veebirakenduse_projekt:front
+    - docker push sh0rts1ghted/veebirakenduse_projekt:front
+
+deploy test-backend:
+  stage: deploy
+  only:
+    refs:
+      - main
+  tags:
+    - main
+  script:
+    - cd /opt/iti0302
+    - docker-compose down
+    - docker-compose up -d
