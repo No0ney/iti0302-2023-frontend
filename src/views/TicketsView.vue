@@ -5,7 +5,7 @@ import {onMounted, ref} from "vue";
 const tickets = ref([]);
 
 onMounted(() => {
-  axios.get("api/ticket")
+  axios.get("api/flight")
       .then(response => {
         tickets.value = response.data;
       });
