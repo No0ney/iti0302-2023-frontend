@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import FlightsView from '../views/FlightsView.vue'
-import TicketsView from "@/views/TicketsView.vue";
+import AllFlightsView from "@/views/AllFlightsView.vue";
 import SearchByIdView from "@/views/SearchByIdView.vue";
 
 const router = createRouter({
@@ -12,9 +12,9 @@ const router = createRouter({
       component: FlightsView
     },
     {
-      path: "/ticket",
-      name: "ticket",
-      component: TicketsView
+      path: "/flights",
+      name: "flights",
+      component: AllFlightsView
     },
     {
       path: '/id',
