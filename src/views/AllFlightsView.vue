@@ -50,7 +50,7 @@ main {
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 
     th {
-      background-color: #188AC3;
+      background-color: #188AC2;
       color: white;
       padding: 10px;
       text-align: left;
