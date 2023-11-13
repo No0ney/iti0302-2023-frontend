@@ -15,6 +15,7 @@ onMounted(() => {
   <main>
     <h1>Flights</h1>
     <table>
+      <caption>Table of all available flights</caption>
       <tr>
         <th>Departure</th>
         <th>Destination</th>
