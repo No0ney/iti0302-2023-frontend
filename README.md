@@ -1,29 +1,19 @@
-# iti0302-1023-frontend
+# iti-0302-2023-frontend Readme
 
-This template should help get you started developing with Vue 3 in Vite.
+**Team 5**
 
-## Recommended IDE Setup
+## Project description
+This project contains the frontend part of team 5 website. 
+In this project our team uses:
+- Vue.js
+- Vite
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Link to gitlab: https://gitlab.cs.taltech.ee/heatsp/iti0302-2023-frontend
 
-## Customize configuration
+## Usage
+The website is already working on a server (https://flightoroo.hopto.org/), but can also run locally. 
+To run project locally you need to write **npm run dev** into the terminal and proceed to the localhost link you will
+be provided with.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+To receive database data along with the locally ran frontend code, you need to run backend locally as well (project 
+https://gitlab.cs.ttu.ee/heatsp/iti0302-2023-backend).
