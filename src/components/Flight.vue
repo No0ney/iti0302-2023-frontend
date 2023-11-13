@@ -9,13 +9,15 @@ defineEmits([]);
 </script>
 
 <template>
-  <li>
-    <div class="flight">
-      <p>
-        <slot></slot>
-      </p>
-    </div>
-  </li>
+  <ul>
+    <li>
+      <div class="flight">
+        <p>
+          <slot></slot>
+        </p>
+      </div>
+    </li>
+  </ul>
 </template>
 
 <style lang="scss" scoped>
