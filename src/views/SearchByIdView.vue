@@ -4,12 +4,14 @@ import Ticket from "@/components/Ticket.vue";
 import axios from "axios";
 import {ref} from "vue";
 
-let tickets = ref([]);
+let ticket = ref(null);
 
 const findInformation = (id) => {
   axios.get("api/flight/ticket/" + id)
       .then(response => {
-        tickets.value = response.data;
+        if (response.data.id !== null) {
+          ticket.value = response.data;
+        }
         console.log(response.data)
       });
 };
@@ -20,10 +22,9 @@ const findInformation = (id) => {
     <h1>Please enter your ticket id to check your ticket information.</h1>
       <div>
         <TicketSearchBar @find-ticket="findInformation" />
-        <ul class="ticket-list" v-if="tickets.length > 0">
-          <Ticket
-          v-for="ticket in tickets" :ticket="ticket">
-            {{ticket.id}}
+        <ul class="ticket" v-if="ticket !== null">
+          <Ticket>
+            {{ticket}}
           </Ticket>
         </ul>
       </div>
