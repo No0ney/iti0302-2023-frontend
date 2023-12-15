@@ -13,7 +13,7 @@ const createToken = (username, password) => {
   })
       .then(response => {
         localStorage.setItem('user-token', response.data);
-        this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + response.data;
+        axios.defaults.headers.common['Authorization'] = response.data;
       });
 };
 </script>

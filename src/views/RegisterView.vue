@@ -1,6 +1,11 @@
 <script setup>
 import Form from "@/components/Form.vue";
 import axios from "axios";
+import {reactive} from "vue";
+
+let logInState = reactive({
+  mayLogIn: null
+});
 
 const createToken = (username, password) => {
   axios({
@@ -11,19 +16,7 @@ const createToken = (username, password) => {
       password: password
     }
   });
-
-  // axios({
-  //   method: 'post',
-  //   url: '/api/flight/login',
-  //   data: {
-  //     username: username,
-  //     password: password
-  //   }
-  // })
-  //     .then(response => {
-  //       localStorage.setItem('user-token', response.data);
-  //       this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + response.data;
-  //     });
+  logInState.mayLogIn = true;
 };
 </script>
 
@@ -32,6 +25,7 @@ const createToken = (username, password) => {
     <h1>Register</h1>
     <div>
       <Form @create-token="createToken">Register</Form>
+      <p v-show="logInState.mayLogIn">You may now log in.</p>
     </div>
   </main>
 </template>
