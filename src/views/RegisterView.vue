@@ -4,10 +4,11 @@ import axios from "axios";
 import {reactive} from "vue";
 
 let logInState = reactive({
-  mayLogIn: null
+  usernameErr: null
 });
 
 const createToken = (username, password) => {
+  logInState.usernameErr = null;
   if (localStorage.getItem('user-token') !== null) {
     localStorage.removeItem('user-token');
   }
@@ -18,8 +19,15 @@ const createToken = (username, password) => {
       username: username,
       password: password
     }
-  });
-  logInState.mayLogIn = true;
+  })
+      .then(() => {
+        window.location.replace('/login');
+      })
+      .catch(
+          error => {
+            logInState.usernameErr = true;
+          }
+      );
 };
 </script>
 
@@ -28,7 +36,7 @@ const createToken = (username, password) => {
     <h1>Register</h1>
     <div>
       <Form @create-token="createToken">Register</Form>
-      <p v-show="logInState.mayLogIn">You may now log in.</p>
+      <p v-if="logInState.usernameErr" style="color: red">Username already exists.</p>
     </div>
   </main>
 </template>
