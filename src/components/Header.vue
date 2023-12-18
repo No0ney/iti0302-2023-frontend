@@ -1,5 +1,10 @@
 <script setup>
 import { RouterLink } from "vue-router";
+import { Icon } from '@iconify/vue';
+import { store, checkLogState } from "@/store";
+
+checkLogState();
+
 </script>
 
 <template>
@@ -13,6 +18,10 @@ import { RouterLink } from "vue-router";
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/flights">All flights</RouterLink>
         <RouterLink to="/id">Check Tickets</RouterLink>
+        <RouterLink to="/login" v-if="!store.loggedIn">Log in</RouterLink>
+        <RouterLink to="/profile" v-else>
+          <Icon icon="iconamoon:profile" width="24" />
+        </RouterLink>
       </ul>
     </nav>
   </header>
