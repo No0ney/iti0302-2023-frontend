@@ -11,6 +11,10 @@ app.use(VueAxios, axios)
 
 app.mount('#app')
 
+// window.addEventListener('beforeunload', function (event) {
+//     localStorage.removeItem('user-token');
+// });
+
 const token = localStorage.getItem('user-token')
 if (token) {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;

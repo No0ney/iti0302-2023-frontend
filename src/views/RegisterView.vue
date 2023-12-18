@@ -8,6 +8,9 @@ let logInState = reactive({
 });
 
 const createToken = (username, password) => {
+  if (localStorage.getItem('user-token') !== null) {
+    localStorage.removeItem('user-token');
+  }
   axios({
     method: 'post',
     url: '/api/flight/user',

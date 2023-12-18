@@ -3,6 +3,9 @@ import SearchBar from "@/components/SearchBar.vue";
 import Flight from "@/components/Flight.vue";
 import axios from "axios";
 import {ref} from "vue";
+import {checkLogState} from "@/store";
+
+checkLogState();
 
 let flights = ref([]);
 

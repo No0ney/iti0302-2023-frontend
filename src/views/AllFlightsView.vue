@@ -1,6 +1,7 @@
 <script setup>
 import axios from "axios";
 import {onMounted, ref} from "vue";
+
 const flights = ref([]);
 
 onMounted(() => {

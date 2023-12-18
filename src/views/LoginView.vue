@@ -1,8 +1,17 @@
 <script setup>
 import Form from "@/components/Form.vue";
 import axios from "axios";
+import {reactive} from "vue";
+
+let loginState = reactive({
+  cantLogIn: false
+});
 
 const createToken = (username, password) => {
+  loginState.cantLogIn = false;
+  if (localStorage.getItem('user-token') !== null) {
+    localStorage.removeItem('user-token');
+  }
   axios({
     method: 'post',
     url: '/api/flight/login',
@@ -12,9 +21,18 @@ const createToken = (username, password) => {
     }
   })
       .then(response => {
-        localStorage.setItem('user-token', response.data);
-        axios.defaults.headers.common['Authorization'] = response.data;
-      });
+        if (response.data !== null) {
+          loginState.cantLogIn = false;
+          localStorage.setItem('user-token', response.data);
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data;
+          window.location.replace('/');
+        }
+      })
+      .catch(
+          error => {
+            loginState.cantLogIn = true;
+          }
+      );
 };
 </script>
 
@@ -23,6 +41,7 @@ const createToken = (username, password) => {
     <h1>Log in</h1>
     <div>
       <Form @create-token="createToken" />
+      <p class="err-msg" v-show="loginState.cantLogIn">Wrong username or password.</p>
     </div>
     <p>Don't have an account? </p>
     <div class="route">
@@ -48,6 +67,10 @@ main {
   p {
     margin-top: 10px;
     text-align: center;
+  }
+
+  .err-msg {
+    color: red;
   }
 
   .route {
