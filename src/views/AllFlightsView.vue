@@ -1,8 +1,31 @@
 <script setup>
 import axios from "axios";
-import {onMounted, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 
 const flights = ref([]);
+
+const sorting = reactive({
+  key: '',
+  isAsc: false
+});
+
+const sortFlights = (key) => {
+  sorting.key = key;
+  sorting.isAsc = sorting.key === key ? !sorting.isAsc : true;
+
+  axios.get(`api/flight?sort=${key}&order=${sorting.isAsc ? 'asc' : 'desc'}`)
+      .then(response => {
+        flights.value = response.data;
+      })
+      .catch(error => {
+        console.error("There was an error fetching the sorted data", error);
+      });
+};
+
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
 
 onMounted(() => {
   axios.get("api/flight")
@@ -18,14 +41,14 @@ onMounted(() => {
     <table>
       <caption>Table of all available flights</caption>
       <tr>
-        <th>Departure</th>
-        <th>Destination</th>
-        <th>Departure Date</th>
+        <th @click="sortFlights('departure')">Departure</th>
+        <th @click="sortFlights('destination')">Destination</th>
+        <th @click="sortFlights('departuredate')">Departure Date</th>
       </tr>
       <tr v-for="flight in flights" :key="flight.id">
         <td>{{ flight.departure }}</td>
         <td>{{ flight.destination }}</td>
-        <td>{{ flight.departuredate }}</td>
+        <td>{{ formatDate(flight.departuredate) }}</td>
       </tr>
     </table>
   </main>
@@ -56,6 +79,7 @@ main {
       color: white;
       padding: 10px;
       text-align: left;
+      cursor: pointer;
     }
 
     td {
