@@ -82,6 +82,10 @@ main {
       cursor: pointer;
     }
 
+    th:hover {
+      color: #ddd;
+    }
+
     td {
       padding: 8px;
       text-align: left;
