@@ -1,6 +1,7 @@
 <script setup>
 import axios from "axios";
 import {onMounted, reactive, ref} from "vue";
+import Pagination from "@/components/Pagination.vue";
 
 const flights = ref([]);
 
@@ -38,6 +39,7 @@ onMounted(() => {
 <template>
   <main>
     <h1>Flights</h1>
+    <Pagination>
     <table>
       <caption>Table of all available flights</caption>
       <tr>
@@ -51,6 +53,7 @@ onMounted(() => {
         <td>{{ formatDate(flight.departuredate) }}</td>
       </tr>
     </table>
+    </Pagination>
   </main>
 </template>
 
