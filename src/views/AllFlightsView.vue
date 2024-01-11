@@ -1,58 +1,14 @@
 <script setup>
-import axios from "axios";
-import {onMounted, reactive, ref} from "vue";
 import Pagination from "@/components/Pagination.vue";
+import AllFlightsTable from "@/components/AllFlightsTable.vue";
 
-const flights = ref([]);
-
-const sorting = reactive({
-  key: '',
-  isAsc: false
-});
-
-const sortFlights = (key) => {
-  sorting.key = key;
-  sorting.isAsc = sorting.key === key ? !sorting.isAsc : true;
-
-  axios.get(`api/flight?sort=${key}&order=${sorting.isAsc ? 'asc' : 'desc'}`)
-      .then(response => {
-        flights.value = response.data;
-      })
-      .catch(error => {
-        console.error("There was an error fetching the sorted data", error);
-      });
-};
-
-const formatDate = (dateString) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-};
-
-onMounted(() => {
-  axios.get("api/flight")
-      .then(response => {
-        flights.value = response.data;
-      });
-});
 </script>
 
 <template>
   <main>
     <h1>Flights</h1>
     <Pagination>
-    <table>
-      <caption>Table of all available flights</caption>
-      <tr>
-        <th @click="sortFlights('departure')">Departure</th>
-        <th @click="sortFlights('destination')">Destination</th>
-        <th @click="sortFlights('departuredate')">Departure Date</th>
-      </tr>
-      <tr v-for="flight in flights" :key="flight.id">
-        <td>{{ flight.departure }}</td>
-        <td>{{ flight.destination }}</td>
-        <td>{{ formatDate(flight.departuredate) }}</td>
-      </tr>
-    </table>
+      <AllFlightsTable/>
     </Pagination>
   </main>
 </template>

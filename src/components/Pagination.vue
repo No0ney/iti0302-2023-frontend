@@ -2,9 +2,17 @@
   <div>
     <div class="pagination-row">
       <button class="pagination-button">Previous page</button>
-      <span v-for="(item, index) in new Array(10)" :key="index">
-        <button class="pagination-button">{{index + 1}}</button>
-      </span>
+      Showing:
+      <span
+          class="showing"
+          :class="perPage === amount && 'active'"
+          v-for="(amount, index) in perPageOptions"
+          :key="index"
+          @click="setPerPage(amount)"
+      >{{amount}}</span>
+      <span class="inner-pagination-content">
+                Page {{ page }} of {{ pages }}
+            </span>
       <button class="pagination-button">Next page</button>
     </div>
     <slot />
