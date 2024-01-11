@@ -1,6 +1,6 @@
 # Plane tickets search website
 
-### **Team 5**
+### Team 5
 
 ### Introduction
 This is a frontend project for a simple webpage made using Vue.js and Vite that provides UI/UX for a plane ticket 
@@ -13,6 +13,7 @@ browsing and/or booking application.
 
 ### Technologies Used
 - Java 17+
+- NodeJS
 - Vue.js
 - Vite
 - Iconify
@@ -22,6 +23,8 @@ These instructions will help you set up the project on your local machine for de
 
 ### Prerequisites
 - Java version 17 or later
+- NodeJS
+- NPM
 
 ### Setup
 The website is already working on a server (https://flightoroo.hopto.org/), but can also be run locally.
