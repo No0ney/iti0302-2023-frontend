@@ -3,27 +3,36 @@ import axios from "axios";
 import {onMounted, reactive, ref} from "vue";
 
 const flights = ref([]);
-
+const currentPage = ref(1);
+const pageSize = ref(5);
+const totalPages = ref(0);
+const totalItems = ref(0);
 const sorting = reactive({
   key: '',
   isAsc: false
 });
 
-const sortFlights = (key) => {
-  sorting.key = key;
-  sorting.isAsc = sorting.key === key ? !sorting.isAsc : true;
-
-  axios.get(`api/flight?sort=${key}&order=${sorting.isAsc ? 'asc' : 'desc'}`)
+const fetchFlights = () => {
+  axios.get(`api/flight?page=${currentPage.value - 1}&size=${pageSize.value}&sort=${sorting.key}&order=${sorting.isAsc ? 'asc' : 'desc'}`)
       .then(response => {
         flights.value = response.data;
       })
-      .catch(error => {
-        console.error("There was an error fetching the sorted data", error);
-      });
+      .catch(error => console.error("Error fetching flights", error));
+};
+
+const changePage = (page) => {
+  currentPage.value = page;
+  fetchFlights();
+};
+
+const sortFlights = (key) => {
+  sorting.key = key;
+  sorting.isAsc = sorting.key === key ? !sorting.isAsc : true;
+  fetchFlights();
 };
 
 const formatDate = (dateString) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const options = {year: 'numeric', month: 'long', day: 'numeric'};
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
@@ -32,8 +41,15 @@ onMounted(() => {
       .then(response => {
         flights.value = response.data;
       });
+  axios.get(`api/flight/amount`)
+      .then(response => {
+        totalItems.value = response.data;
+        totalPages.value = Math.ceil(totalItems.value / pageSize.value); // Calculate totalPages here
+      })
+      .catch(error => console.error("Error fetching total flights amount", error));
 });
 </script>
+
 
 <template>
   <main>
@@ -51,8 +67,18 @@ onMounted(() => {
         <td>{{ formatDate(flight.departuredate) }}</td>
       </tr>
     </table>
+    <div class="pagination">
+      <button
+              v-for="page in totalPages"
+              :key="page"
+              @click="changePage(page)"
+              :class="{ active: page === currentPage }">
+        {{ page }}
+      </button>
+    </div>
   </main>
 </template>
+
 
 <style lang="scss" scoped>
 main {
@@ -100,11 +126,45 @@ main {
       background-color: #ddd;
     }
   }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    button {
+      background-color: #188AC2;
+      border: none;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.3s;
+
+      &:hover {
+        background-color: #0f6a9d;
+        transform: translateY(-2px);
+      }
+
+      &.active {
+        background-color: #0e5b8d;
+        font-weight: bold;
+      }
+    }
+  }
 
   @media (max-width: 600px) {
     table {
       display: block;
       overflow-x: auto;
+    }
+    .pagination button {
+      padding: 8px 16px;
+      font-size: 14px;
     }
   }
 }
