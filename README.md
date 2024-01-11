@@ -23,7 +23,7 @@ browsing and/or booking application.
 These instructions will help you set up the project on your local machine for development and testing purposes.
 
 ### Prerequisites
-- Java version 17 or later
+- JavaScrypt
 - NodeJS
 - NPM
 
