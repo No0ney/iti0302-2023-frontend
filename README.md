@@ -14,6 +14,7 @@ browsing and/or booking application.
 ### Technologies Used
 - Java 17+
 - NodeJS
+- NPM
 - Vue.js
 - Vite
 - Iconify
