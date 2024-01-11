@@ -3,7 +3,7 @@ import Button from "@/components/Button.vue";
 
 const doLogOut = () => {
   localStorage.removeItem('user-token');
-  window.location.replace('/login');
+  window.location.replace('/');
 }
 </script>
 
