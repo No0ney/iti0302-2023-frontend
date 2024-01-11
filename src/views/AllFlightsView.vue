@@ -59,11 +59,13 @@ onMounted(() => {
       <tr>
         <th @click="sortFlights('departure')">Departure</th>
         <th @click="sortFlights('destination')">Destination</th>
+        <th @click="sortFlights('company')">Airline</th>
         <th @click="sortFlights('departuredate')">Departure Date</th>
       </tr>
       <tr v-for="flight in flights" :key="flight.id">
         <td>{{ flight.departure }}</td>
         <td>{{ flight.destination }}</td>
+        <td>{{ flight.company}}</td>
         <td>{{ formatDate(flight.departuredate) }}</td>
       </tr>
     </table>
