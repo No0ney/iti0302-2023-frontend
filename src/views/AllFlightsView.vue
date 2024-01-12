@@ -1,52 +1,53 @@
 <script setup>
 import axios from "axios";
-import {onMounted, reactive, ref} from "vue";
+import { onMounted, reactive, ref } from "vue";
 
 const flights = ref([]);
 const currentPage = ref(1);
-const pageSize = ref(5);
+const pageSize = ref(8);
 const totalPages = ref(0);
 const totalItems = ref(0);
 const sorting = reactive({
   key: '',
   isAsc: false
 });
+const searchQuery = ref('');
 
-const fetchFlights = () => {
-  axios.get(`api/flight?page=${currentPage.value - 1}&size=${pageSize.value}&sort=${sorting.key}&order=${sorting.isAsc ? 'asc' : 'desc'}`)
+const searchFlights = () => {
+  axios.get(`api/flight`, {  // Changed from api/flight/search to api/flight
+    params: {
+      page: currentPage.value - 1,
+      size: pageSize.value,
+      sort: sorting.key,
+      order: sorting.isAsc ? 'asc' : 'desc',
+      query: searchQuery.value
+    }
+  })
       .then(response => {
         flights.value = response.data;
+        // Update totalItems and totalPages if needed
       })
-      .catch(error => console.error("Error fetching flights", error));
+      .catch(error => console.error("Error searching flights", error));
 };
 
 const changePage = (page) => {
   currentPage.value = page;
-  fetchFlights();
+  searchFlights();
 };
 
 const sortFlights = (key) => {
   sorting.key = key;
   sorting.isAsc = sorting.key === key ? !sorting.isAsc : true;
-  fetchFlights();
+  searchFlights();
 };
 
 const formatDate = (dateString) => {
-  const options = {year: 'numeric', month: 'long', day: 'numeric'};
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
 onMounted(() => {
-  axios.get("api/flight")
-      .then(response => {
-        flights.value = response.data;
-      });
-  axios.get(`api/flight/amount`)
-      .then(response => {
-        totalItems.value = response.data;
-        totalPages.value = Math.ceil(totalItems.value / pageSize.value); // Calculate totalPages here
-      })
-      .catch(error => console.error("Error fetching total flights amount", error));
+  searchFlights();
 });
 </script>
 
@@ -54,6 +55,10 @@ onMounted(() => {
 <template>
   <main>
     <h1>Flights</h1>
+    <div class="search-container">
+      <input v-model="searchQuery" placeholder="Search Flights">
+      <button @click="searchFlights">Search</button>
+    </div>
     <table>
       <caption>Table of all available flights</caption>
       <tr>
@@ -65,16 +70,16 @@ onMounted(() => {
       <tr v-for="flight in flights" :key="flight.id">
         <td>{{ flight.departure }}</td>
         <td>{{ flight.destination }}</td>
-        <td>{{ flight.company}}</td>
+        <td>{{ flight.company }}</td>
         <td>{{ formatDate(flight.departuredate) }}</td>
       </tr>
     </table>
     <div class="pagination">
       <button
-              v-for="page in totalPages"
-              :key="page"
-              @click="changePage(page)"
-              :class="{ active: page === currentPage }">
+          v-for="page in totalPages"
+          :key="page"
+          @click="changePage(page)"
+          :class="{ active: page === currentPage }">
         {{ page }}
       </button>
     </div>
@@ -95,6 +100,28 @@ main {
     margin-bottom: 24px;
     text-align: center;
     font-size: 2em;
+  }
+
+  .search-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    input {
+      padding: 8px;
+      margin-right: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 8px 15px;
+      background-color: #188AC2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
   }
 
   table {
@@ -128,6 +155,7 @@ main {
       background-color: #ddd;
     }
   }
+
   .pagination {
     display: flex;
     justify-content: center;
@@ -156,17 +184,6 @@ main {
         background-color: #0e5b8d;
         font-weight: bold;
       }
-    }
-  }
-
-  @media (max-width: 600px) {
-    table {
-      display: block;
-      overflow-x: auto;
-    }
-    .pagination button {
-      padding: 8px 16px;
-      font-size: 14px;
     }
   }
 }
