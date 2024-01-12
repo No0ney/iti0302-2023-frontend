@@ -15,6 +15,10 @@ const findFlight = (departure, destination) => {
         flights.value = response.data;
       });
 };
+const formatDate = (dateString) => {
+  const options = {year: 'numeric', month: 'long', day: 'numeric'};
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
 </script>
 
 <template>
@@ -27,7 +31,10 @@ const findFlight = (departure, destination) => {
             v-for="flight in flights"
             :flight="flight"
         >
-          {{flight.departure}}, {{flight.destination}}
+          <p><strong>Departure:</strong> {{flight.departure}}</p>
+          <p><strong>Destination:</strong> {{flight.destination}}</p>
+          <p><strong>Airline:</strong> {{flight.company}}</p>
+          <p><strong>Date:</strong> {{formatDate(flight.departuredate)}}</p>
         </Flight>
       </ul>
     </div>
