@@ -15,8 +15,6 @@ const findFlight = () => {
   flightState.invalid = null;
   if (flightState.departure !== '' && flightState.destination !== '') {
     emit('find-flight', flightState.departure, flightState.destination);
-    // flightState.departure = '';    this removes values from the
-    // flightState.destination = '';  search bar, but we don't want that
     return;
   }
   flightState.invalid = true;

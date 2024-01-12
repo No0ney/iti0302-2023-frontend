@@ -2,12 +2,19 @@
 import SearchBar from "@/components/SearchBar.vue";
 import Flight from "@/components/Flight.vue";
 import axios from "axios";
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import {checkLogState} from "@/store";
+import Button from "@/components/Button.vue";
 
 checkLogState();
 
 let flights = ref([]);
+
+const bookingState = reactive({
+  flightID: null,
+  invalid: null,
+  errMsg: '',
+});
 
 const findFlight = (departure, destination) => {
   axios.get("api/flight/find/" + departure + "/" + destination)
@@ -19,6 +26,16 @@ const formatDate = (dateString) => {
   const options = {year: 'numeric', month: 'long', day: 'numeric'};
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
+
+const bookTicket = () => {
+  bookingState.invalid = null;
+  axios.get("/api/flight/book/" + bookingState.flightID)
+      .catch(error => {
+        console.error("Error booking ticket.", error);
+        bookingState.invalid = true;
+        bookingState.errMsg = "Ticket can't be booked."
+      });
+}
 </script>
 
 <template>
@@ -35,6 +52,8 @@ const formatDate = (dateString) => {
           <p><strong>Destination:</strong> {{flight.destination}}</p>
           <p><strong>Airline:</strong> {{flight.company}}</p>
           <p><strong>Date:</strong> {{formatDate(flight.departuredate)}}</p>
+          <p class="errMsg" v-if="bookingState.invalid">{{ bookingState.errMsg }}</p>
+          <Button v-model="bookingState.flightID === flight.id" @click="bookTicket">Book</Button>
         </Flight>
       </ul>
     </div>
@@ -53,6 +72,10 @@ main {
   h1 {
     margin-bottom: 16px;
     text-align: center;
+  }
+
+  .errMsg {
+    color: red;
   }
 }
 </style>
