@@ -35,7 +35,7 @@ const ticketInfo = reactive({
         <li>
           <div class="ticket">
             <p><strong>Ticket ID:</strong> {{ ticketInfo.id }}</p>
-            <p><strong>Flight:</strong> {{ ticketInfo.flight }}</p>
+            <p><strong>Flight Number:</strong> {{ ticketInfo.flight }}</p>
             <p><strong>Seat Number:</strong> {{ ticketInfo.seatNumber }}</p>
             <p><strong>Price:</strong> ${{ ticketInfo.price.toFixed(2) }}</p>
           </div>
