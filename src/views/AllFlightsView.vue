@@ -25,7 +25,6 @@ const searchFlights = () => {
   })
       .then(response => {
         flights.value = response.data;
-        // Update totalItems and totalPages if needed
       })
       .catch(error => console.error("Error searching flights", error));
 };
@@ -46,7 +45,17 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
+const fetchTotalFlightsCount = () => {
+  axios.get(`api/flight/amount`)
+      .then(response => {
+        totalItems.value = response.data;
+        totalPages.value = Math.ceil(totalItems.value / pageSize.value);
+      })
+      .catch(error => console.error("Error fetching total flights count", error));
+};
+
 onMounted(() => {
+  fetchTotalFlightsCount();
   searchFlights();
 });
 </script>
