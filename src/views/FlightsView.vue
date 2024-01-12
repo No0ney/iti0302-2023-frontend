@@ -3,7 +3,7 @@ import SearchBar from "@/components/SearchBar.vue";
 import Flight from "@/components/Flight.vue";
 import axios from "axios";
 import {reactive, ref} from "vue";
-import {checkLogState} from "@/store";
+import {checkLogState, store} from "@/store";
 import Button from "@/components/Button.vue";
 
 checkLogState();
@@ -11,9 +11,10 @@ checkLogState();
 let flights = ref([]);
 
 const bookingState = reactive({
-  flightID: null,
   invalid: null,
   errMsg: '',
+  success: null,
+  successMsg: ''
 });
 
 const findFlight = (departure, destination) => {
@@ -27,13 +28,18 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
-const bookTicket = () => {
+const bookTicket = (flightID) => {
   bookingState.invalid = null;
-  axios.get("/api/flight/book/" + bookingState.flightID)
+  bookingState.success = null;
+  axios.get("/api/flight/book/" + flightID)
+      .then(response => {
+        bookingState.success = true;
+        bookingState.successMsg = 'Booked'
+      })
       .catch(error => {
         console.error("Error booking ticket.", error);
         bookingState.invalid = true;
-        bookingState.errMsg = "Ticket can't be booked."
+        bookingState.errMsg = "Can't be booked."
       });
 }
 </script>
@@ -52,8 +58,11 @@ const bookTicket = () => {
           <p><strong>Destination:</strong> {{flight.destination}}</p>
           <p><strong>Airline:</strong> {{flight.company}}</p>
           <p><strong>Date:</strong> {{formatDate(flight.departuredate)}}</p>
-          <p class="errMsg" v-if="bookingState.invalid">{{ bookingState.errMsg }}</p>
-          <Button v-model="bookingState.flightID === flight.id" @click="bookTicket">Book</Button>
+          <div v-if="store.loggedIn">
+            <p class="errMsg" v-if="bookingState.invalid">{{ bookingState.errMsg }}</p>
+            <Button @click="bookTicket(flight.id)">Book</Button>
+            <p class="successMsg" v-if="bookingState.success">{{ bookingState.successMsg }}</p>
+          </div>
         </Flight>
       </ul>
     </div>
@@ -76,6 +85,15 @@ main {
 
   .errMsg {
     color: red;
+  }
+
+  .successMsg {
+    color: black;
+  }
+
+  Button {
+    margin-top: 5px;
+    background-color: lightgrey;
   }
 }
 </style>
