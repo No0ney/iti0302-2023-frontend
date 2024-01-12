@@ -2,6 +2,7 @@
 import axios from "axios";
 import {onMounted, ref} from "vue";
 const hello = ref();
+const cat = ref();
 
 onMounted(() => {
   axios.get("api/admin/hello")
@@ -14,12 +15,21 @@ onMounted(() => {
           }
       )
 });
+onMounted(() => {
+  axios.get("api/flight/cat")
+      .then(response => {
+        cat.value = response.data
+      })
+    }
+)
 </script>
 
 <template>
   <main>
     <h1>Your profile</h1>
     <p>{{ hello }}</p>
+    <p><strong>Here is a random cat fact:</strong></p>
+    <p>{{cat}}</p>
     <div class="logout">
       <RouterLink to="/logout">Log out</RouterLink>
     </div>
